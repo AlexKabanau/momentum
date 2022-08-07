@@ -1,6 +1,7 @@
 const time = document.querySelector('.time');
 const day = document.querySelector('.date');
 const greeting = document.querySelector('.greeting');
+const name = document.querySelector('.name');
 
 //time.textContent = "Text";
 
@@ -28,7 +29,7 @@ showTime();
 function showGreeting() {
     const date = new Date();
     const hours = date.getHours();
-    //console.log(Math.trunc(hours/6));
+    console.log(hours);
 
     function getTimeOfDay(hours){
         if (hours>0 && hours<=6) {
@@ -49,7 +50,29 @@ function showGreeting() {
 
     greeting.textContent = greetingText;
 
+    /*form.addEventListener('submit', function(event){
+        // alert('submit!');
+        event.preventDefault();
+        console.log('E-mail' + login.value);
+        alert('E-mail: ' + login.value);
+        console.log('password' + password.value);
+        alert('password: ' + password.value);
+    });*/
+
     setTimeout(showGreeting, 1000);
 };
 showGreeting();
 
+/*---------------------------------------*/
+
+function setLocalStorage() {
+    localStorage.setItem('name', name.value);
+  }
+window.addEventListener('beforeunload', setLocalStorage)
+
+function getLocalStorage() {
+    if(localStorage.getItem('name')) {
+      name.value = localStorage.getItem('name');
+    }
+  }
+window.addEventListener('load', getLocalStorage)
