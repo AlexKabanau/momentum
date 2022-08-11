@@ -2,6 +2,12 @@ const time = document.querySelector('.time');
 const day = document.querySelector('.date');
 const greeting = document.querySelector('.greeting');
 const name = document.querySelector('.name');
+const body = document.querySelector('body');
+
+// const bgNum  = String(getRandomNum()).padStart(2, "0");
+
+const slideNext = document.querySelector('.slide-next');
+const slidePrev = document.querySelector('.slide-prev');
 
 //time.textContent = "Text";
 
@@ -29,24 +35,30 @@ showTime();
 function showGreeting() {
     const date = new Date();
     const hours = date.getHours();
-    console.log(hours);
+    // console.log(hours);
 
     function getTimeOfDay(hours){
-        if (hours>0 && hours<=6) {
+        if (hours>6 && hours<=12) {
+            // console.log('morning');
             return 'morning';
         }
-        else if (hours>6 && hours<=12) {
-            return 'day';
-        }
         else if (hours>12 && hours<=18) {
+            // console.log('afternoon');
+            // console.log(hours);
+            return 'afternoon';
+        }
+        else if (hours>18 && hours<=23) {
+            // console.log('evening');
+            // console.log(hours);
             return 'evening';
         } else {
+            // console.log('night');
             return 'night';
         }
     };
 
     const timeOfDay = getTimeOfDay(hours);
-    const greetingText = `Good ${timeOfDay}`;
+    const greetingText = `Good ${timeOfDay},`;
 
     greeting.textContent = greetingText;
 
@@ -58,10 +70,81 @@ function showGreeting() {
         console.log('password' + password.value);
         alert('password: ' + password.value);
     });*/
-
+    
     setTimeout(showGreeting, 1000);
 };
 showGreeting();
+
+function getRandomNum() {
+    return Math.floor(Math.random() * (20 - 1) + 1);
+};
+
+let Num = getRandomNum();
+
+function setBg(x) {
+    
+    const date = new Date();
+    const hours = date.getHours();
+
+    function getTimeOfDay(hours){
+        if (hours>6 && hours<=12) {
+            // console.log('morning');
+            return 'morning';
+        }
+        else if (hours>12 && hours<=18) {
+            // console.log('afternoon');
+            // console.log(hours);
+            return 'afternoon';
+        }
+        else if (hours>18 && hours<=23) {
+            // console.log('evening');
+            // console.log(hours);
+            return 'evening';
+        } else {
+            // console.log('night');
+            return 'night';
+        }
+    };
+
+    const timeOfDay = getTimeOfDay(hours);
+    const bgNum  = String(x).padStart(2, "0");
+
+    const img = new Image();
+    img.src = 'https://raw.githubusercontent.com/rolling-scopes-school/stage1-tasks/assets/images/'+timeOfDay+'/'+bgNum+'.jpg';
+    img.onload = () => {      
+        body.style.backgroundImage = "url('"+img.src+"')";// здесь тоже ваш код
+      };
+    // body.style.backgroundImage = "url('"+str+"')";
+
+    // console.log(bgNum);
+
+    // console.log(timeOfDay);
+
+    // console.log(img.src);
+    // console.log(url);
+
+};
+// setBg();
+
+function getSlideNext() {
+    console.log('next');
+    Num++;
+
+    if (Num>20) {Num = 1};
+
+    setBg(Num);
+};
+function getSlidePrev() {
+    console.log('prev');
+    Num--;
+
+    if (Num<1) {Num = 20};
+
+    setBg(Num);
+};
+
+slideNext.addEventListener('click', getSlideNext);
+slidePrev.addEventListener('click', getSlidePrev);
 
 /*---------------------------------------*/
 
