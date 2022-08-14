@@ -1,6 +1,15 @@
 const time = document.querySelector('.time');
 const day = document.querySelector('.date');
 const greeting = document.querySelector('.greeting');
+
+const greetingTranslation = {
+    en: ['Good morning', 'Good afternoon', 'Good evening', 'Good night'],
+    ru: ['Доброе утро', 'Добрый день', 'Добрый вечер', 'Доброй ночи'],
+    be: ['Добрай ранiцы', 'Добры дзень', 'Добры вечар', 'Дабранач'],
+};
+
+const lang = 'be'; /* язык преветствия ('en', 'ru', 'be') */
+
 const name = document.querySelector('.name');
 const body = document.querySelector('body');
 
@@ -17,12 +26,29 @@ const slidePrev = document.querySelector('.slide-prev');
 
 function showTime() {
     const date = new Date();
-    const currentTime = date.toLocaleTimeString();
+    let currentTime;
+    const options = {hour: 'numeric', minute: 'numeric', second: 'numeric', timeZone: 'UTC'};
+    if (lang=='ru') {
+        
+        currentTime = date.toLocaleString('ru-Ru', options);
+    } else if (lang=='be') {
+        currentTime = date.toLocaleString('be-Be', options);
+    } else {
+        currentTime = date.toLocaleString('en-Gb', options);
+    };
+    // console.log(currentTime);
     time.textContent = currentTime;
 
     function showDate () {
-        const options = {month: 'long', day: 'numeric'};
-        const currentDate = date.toLocaleDateString('ru-Ru', options);
+        const options = {month: 'long', day: 'numeric', year: 'numeric'};
+        let currentDate;
+        if (lang=='ru') {
+            currentDate = date.toLocaleString('ru-Ru', options);
+        } else if (lang=='be') {
+            currentDate = date.toLocaleString('be-Be', options);
+        } else {
+            currentDate = date.toLocaleString('en-Gb', options);
+        };
         day.textContent = currentDate;
         //console.log(currentDate);
     };
@@ -40,25 +66,25 @@ function showGreeting() {
     function getTimeOfDay(hours){
         if (hours>6 && hours<=12) {
             // console.log('morning');
-            return 'morning';
+            return greetingTranslatio[lang][0];
         }
         else if (hours>12 && hours<=18) {
             // console.log('afternoon');
             // console.log(hours);
-            return 'afternoon';
+            return greetingTranslation[lang][1];
         }
         else if (hours>18 && hours<=23) {
             // console.log('evening');
             // console.log(hours);
-            return 'evening';
+            return greetingTranslation[lang][2];
         } else {
             // console.log('night');
-            return 'night';
+            return greetingTranslation[lang][3];
         }
     };
 
     const timeOfDay = getTimeOfDay(hours);
-    const greetingText = `Good ${timeOfDay},`;
+    const greetingText = `${timeOfDay},`;
 
     greeting.textContent = greetingText;
 
@@ -167,7 +193,7 @@ const weatherDescription = document.querySelector('.weather-description');
 const city  = document.querySelector('.city');
 
 async function getWeather() {  
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&lang=ru&appid=f25234012c7015a725d289d0b3a7d92c&units=metric`;
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&lang=${lang}&appid=f25234012c7015a725d289d0b3a7d92c&units=metric`;
   const res = await fetch(url);
   const data = await res.json(); 
 
@@ -283,3 +309,7 @@ function playAudio() {
 play.addEventListener('click', playAudio);
 play_next.addEventListener('click', playNext);
 play_prev.addEventListener('click', playPrev);
+
+
+// !!!!!!!!!!!!!!!!translator
+
