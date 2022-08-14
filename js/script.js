@@ -79,7 +79,7 @@ function getRandomNum() {
     return Math.floor(Math.random() * (20 - 1) + 1);
 };
 
-let Num = getRandomNum();
+let randomNum = getRandomNum();
 
 function setBg(x) {
     
@@ -128,19 +128,19 @@ function setBg(x) {
 
 function getSlideNext() {
     console.log('next');
-    Num++;
+    randomNum++;
 
-    if (Num>20) {Num = 1};
+    if (randomNum>20) {randomNum = 1};
 
-    setBg(Num);
+    setBg(randomNum);
 };
 function getSlidePrev() {
     console.log('prev');
-    Num--;
+    randomNum--;
 
-    if (Num<1) {Num = 20};
+    if (randomNum<1) {randomNum = 20};
 
-    setBg(Num);
+    setBg(randomNum);
 };
 
 slideNext.addEventListener('click', getSlideNext);
@@ -202,11 +202,84 @@ async function getQuotes() {
     quote.textContent = data[x].text;
     author.textContent = data[x].author;
 
-    console.log(quote);
-    console.log(author);
-    console.log(x);
-    console.log(data[x].text);
+//     console.log(quote);
+//     console.log(author);
+//     console.log(x);
+//     console.log(data[x].text);
 };
 changeQuote.addEventListener('click',getQuotes);
 // getQuotes();
 
+// !!!!!!!!!!!!!!!!!!!!!audio
+
+const audio = new Audio();
+const play = document.querySelector('.play');
+const play_next = document.querySelector('.play-next');
+const play_prev = document.querySelector('.play-prev');
+// const button = document.querySelector('.play');
+const play_list = document.querySelector('.play-list');
+
+
+let isPlay = false;
+import playList from './playList.js';
+    // console.log(playList);
+
+let playNum = 0;
+
+for(let i = 0; i < playList.length; i++) {
+    const li = document.createElement('li');
+
+    li.classList.add('play-item');
+    li.textContent = playList[i].title;
+    play_list.append(li);// здесь ваш код// здесь ваш код
+}
+
+// playList.forEach(el => {
+//     const li = document.createElement('li');
+
+//     li.classList.add('play-item');
+//     li.textContent = playList[0].title;
+//     play_list.append(li);
+// })
+
+
+
+function playNext () {
+    playNum++;
+    if (playNum>=playList.length) {playNum=0;}
+    playAudio();
+};
+function playPrev () {
+    playNum--;
+    if (playNum<0) {playNum=playList.length-1;}
+    playAudio();
+};
+function toggleBtn() {
+        console.log('click');
+        // play.classList.toggle('play');
+        play.classList.toggle('pause');
+    }
+function playAudio() {
+    
+    audio.src = playList[playNum].src;
+    audio.currentTime = 0;
+    console.log(playNum)
+    
+    play.addEventListener('click', toggleBtn);
+
+    if(!isPlay) {
+        isPlay = true;
+        audio.play();
+        // play.addEventListener('click', toggleBtn);
+    } else {
+        isPlay = false
+        audio.pause();
+        // play.addEventListener('click', toggleBtn);
+    };
+}
+// function pauseAudio() {
+    
+// }
+play.addEventListener('click', playAudio);
+play_next.addEventListener('click', playNext);
+play_prev.addEventListener('click', playPrev);
