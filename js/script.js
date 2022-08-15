@@ -3,12 +3,13 @@ const day = document.querySelector('.date');
 const greeting = document.querySelector('.greeting');
 
 const greetingTranslation = {
-    en: ['Good morning', 'Good afternoon', 'Good evening', 'Good night'],
-    ru: ['Доброе утро', 'Добрый день', 'Добрый вечер', 'Доброй ночи'],
-    be: ['Добрай ранiцы', 'Добры дзень', 'Добры вечар', 'Дабранач'],
+    En: ['Good morning', 'Good afternoon', 'Good evening', 'Good night'],
+    Ru: ['Доброе утро', 'Добрый день', 'Добрый вечер', 'Доброй ночи'],
+    Be: ['Добрай ранiцы', 'Добры дзень', 'Добры вечар', 'Дабранач'],
 };
 
-const lang = 'be'; /* язык преветствия ('en', 'ru', 'be') */
+let lang = 'En'; /* язык преветствия ('En', 'Ru', 'Be') */
+const search = 'Git';/*'Git', 'Flickr', 'Unsplash'*/
 
 const name = document.querySelector('.name');
 const body = document.querySelector('body');
@@ -19,8 +20,31 @@ const slideNext = document.querySelector('.slide-next');
 const slidePrev = document.querySelector('.slide-prev');
 
 //time.textContent = "Text";
+const langEn = document.querySelector('.en');
+const langRu = document.querySelector('.ru');
+const langBe = document.querySelector('.be');
+console.log(langEn);
+console.log(langRu);
+console.log(langBe);
+
+langEn.addEventListener('click', addActive);
+langRu.addEventListener('click', addActive);
+langBe.addEventListener('click', addActive);
 
 
+
+function addActive(element) {
+    console.log(element);
+    langEn.classList.remove('active');
+    langRu.classList.remove('active');
+    langBe.classList.remove('active');
+    console.log(element);
+    element.target.classList.add('active');
+    lang = element.target.innerHTML;
+//     // console.log(event)
+//     // if (langEn.classList.contains('active'))
+//     // event.classList.toggle('active')
+}
 
 //console.log(currentTime);
 
@@ -28,10 +52,10 @@ function showTime() {
     const date = new Date();
     let currentTime;
     const options = {hour: 'numeric', minute: 'numeric', second: 'numeric', timeZone: 'UTC'};
-    if (lang=='ru') {
+    if (lang=='Ru') {
         
         currentTime = date.toLocaleString('ru-Ru', options);
-    } else if (lang=='be') {
+    } else if (lang=='Be') {
         currentTime = date.toLocaleString('be-Be', options);
     } else {
         currentTime = date.toLocaleString('en-Gb', options);
@@ -40,12 +64,12 @@ function showTime() {
     time.textContent = currentTime;
 
     function showDate () {
-        const options = {month: 'long', day: 'numeric', year: 'numeric'};
+        const options = {weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'};
         let currentDate;
-        if (lang=='ru') {
+        if (lang=='Ru') {
             currentDate = date.toLocaleString('ru-Ru', options);
-        } else if (lang=='be') {
-            currentDate = date.toLocaleString('be-Be', options);
+        } else if (lang=='Be') {
+            currentDate = date.toLocaleString('be-BY', options);
         } else {
             currentDate = date.toLocaleString('en-Gb', options);
         };
@@ -66,7 +90,7 @@ function showGreeting() {
     function getTimeOfDay(hours){
         if (hours>6 && hours<=12) {
             // console.log('morning');
-            return greetingTranslatio[lang][0];
+            return greetingTranslation[lang][0];
         }
         else if (hours>12 && hours<=18) {
             // console.log('afternoon');
@@ -136,8 +160,11 @@ function setBg(x) {
     const bgNum  = String(x).padStart(2, "0");
 
     const img = new Image();
+    // img.src = getLinkToImage();
     img.src = 'https://raw.githubusercontent.com/rolling-scopes-school/stage1-tasks/assets/images/'+timeOfDay+'/'+bgNum+'.jpg';
-    img.onload = () => {      
+    
+    img.onload = () => {
+        // console.log('done')      
         body.style.backgroundImage = "url('"+img.src+"')";// здесь тоже ваш код
       };
     // body.style.backgroundImage = "url('"+str+"')";
@@ -150,6 +177,54 @@ function setBg(x) {
     // console.log(url);
 
 };
+// async function getLinkToImage() {
+//     const url = 'https://api.unsplash.com/photos/random?orientation=landscape&query=barcelone&client_id=Xu--LAsXa7QzwmNq_m-XqvSc9x_YPT1Gi5F3YW03sSY';
+//     const res = await fetch(url);
+//     const data = await res.json();
+//     console.log(data.urls.regular);
+//     // return data.urls.regular
+//     // body.style.backgroundImage = "url('"+data.urls.regular+"')";
+// }
+// const x = getLinkToImage();
+// console.log(x);
+// body.style.backgroundImage = x;
+
+function getLinkToImage() {
+    const url = 'https://api.unsplash.com/photos/random?orientation=landscape&query=belarus&client_id=Xu--LAsXa7QzwmNq_m-XqvSc9x_YPT1Gi5F3YW03sSY';
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        // console.log(data.urls.regular);
+        body.style.backgroundImage = "url('"+data.urls.regular+"')";
+      });
+      
+    
+//     //   return data.urls.regular;
+}
+function getFlickrLinkToImage(randomNum) {
+    const url = 'https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=6111c6b5ff2145ab8871ef967b9e0d99&tags=belarus&extras=url_l&format=json&nojsoncallback=1';
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        console.log(data.photos.photo[randomNum].url_l);
+        body.style.backgroundImage = "url('"+data.photos.photo[randomNum].url_l+"')";
+    });
+
+     
+    
+//     //   return data.urls.regular;
+}
+// getFlickrLinkToImage();
+
+// getLinkToImage();
+// function setBgUnsplash () {
+//     const img = new Image();
+//     img.src = getLinkToImage();
+//     img.onload = () => {      
+//         body.style.backgroundImage = "url('"+img.src+"')";// здесь тоже ваш код
+//       };
+// };
+// setBgUnsplash();
 // setBg();
 
 function getSlideNext() {
@@ -158,7 +233,9 @@ function getSlideNext() {
 
     if (randomNum>20) {randomNum = 1};
 
-    setBg(randomNum);
+    getLinkToImage();//подключен unsplash
+    getFlickrLinkToImage(randomNum);//подключен flickr
+    // setBg(randomNum);
 };
 function getSlidePrev() {
     console.log('prev');
@@ -166,7 +243,10 @@ function getSlidePrev() {
 
     if (randomNum<1) {randomNum = 20};
 
-    setBg(randomNum);
+    getLinkToImage();//подключен unsplash
+    getFlickrLinkToImage(randomNum);//подключен flickr
+
+    // setBg(randomNum);
 };
 
 slideNext.addEventListener('click', getSlideNext);
@@ -176,6 +256,7 @@ slidePrev.addEventListener('click', getSlidePrev);
 
 function setLocalStorage() {
     localStorage.setItem('name', name.value);
+    localStorage.setItem('city', city.value);
   }
 window.addEventListener('beforeunload', setLocalStorage)
 
@@ -183,6 +264,9 @@ function getLocalStorage() {
     if(localStorage.getItem('name')) {
       name.value = localStorage.getItem('name');
     }
+    if(localStorage.getItem('city')) {
+        city.value = localStorage.getItem('city');
+      }
   }
 window.addEventListener('load', getLocalStorage);
 
@@ -190,7 +274,8 @@ window.addEventListener('load', getLocalStorage);
 const weatherIcon = document.querySelector('.weather-icon');
 const temperature = document.querySelector('.temperature');
 const weatherDescription = document.querySelector('.weather-description');
-const city  = document.querySelector('.city');
+const city = document.querySelector('.city');
+if (!city.value) {city.value = 'Минск'}
 
 async function getWeather() {  
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&lang=${lang}&appid=f25234012c7015a725d289d0b3a7d92c&units=metric`;
@@ -204,6 +289,7 @@ async function getWeather() {
 
 //   console.log(data.weather[0].id, data.weather[0].description, data.main.temp);
 };
+getWeather();
 city.addEventListener('change', getWeather);
 // getWeather();
 
@@ -244,7 +330,17 @@ const play_next = document.querySelector('.play-next');
 const play_prev = document.querySelector('.play-prev');
 // const button = document.querySelector('.play');
 const play_list = document.querySelector('.play-list');
+const volume_icon = document.querySelector('.volume-icon');
 
+volume_icon.addEventListener('click', muteToggle);
+
+function muteToggle () {
+    volume_icon.classList.toggle('mute');
+    audio.muted = !audio.muted;
+    // if (audio.muted) {
+    //     audio.volume = 1;
+    // } else {audio.volume = 0}
+};
 
 let isPlay = false;
 import playList from './playList.js';
@@ -302,6 +398,21 @@ function playAudio() {
         audio.pause();
         // play.addEventListener('click', toggleBtn);
     };
+
+    const timeline = document.querySelector(".timeline");
+    timeline.addEventListener("click", e => {
+    const timelineWidth = window.getComputedStyle(timeline).width;
+    const timeToSeek = e.offsetX / parseInt(timelineWidth) * audio.duration;
+    audio.currentTime = timeToSeek;
+    }, false);
+
+    setInterval(() => {
+        const progressBar = document.querySelector(".progress");
+        progressBar.style.width = audio.currentTime / audio.duration * 100 + "%";
+        // document.querySelector(".time .current").textContent = getTimeCodeFromNum(
+        //   audio.currentTime
+        // );
+      }, 500);
 }
 // function pauseAudio() {
     
@@ -309,6 +420,7 @@ function playAudio() {
 play.addEventListener('click', playAudio);
 play_next.addEventListener('click', playNext);
 play_prev.addEventListener('click', playPrev);
+
 
 
 // !!!!!!!!!!!!!!!!translator
