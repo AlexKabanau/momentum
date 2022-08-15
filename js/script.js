@@ -40,7 +40,7 @@ function addActive(element) {
     langBe.classList.remove('active');
     console.log(element);
     element.target.classList.add('active');
-    lang = element.target.innerHTML;
+    lang = element.target.innerHTML
 //     // console.log(event)
 //     // if (langEn.classList.contains('active'))
 //     // event.classList.toggle('active')
@@ -228,23 +228,40 @@ function getFlickrLinkToImage(randomNum) {
 // setBg();
 
 function getSlideNext() {
-    console.log('next');
+    // console.log('next');
     randomNum++;
+    if (lang=="En") {
+        if (randomNum>20) {randomNum = 1};
 
-    if (randomNum>20) {randomNum = 1};
+        // getLinkToImage();//подключен unsplash
+        // getFlickrLinkToImage(randomNum);//подключен flickr
+        setBg(randomNum);
+    } else if (lang=="Ru") {
+        getLinkToImage();//подключен unsplash
+    } else {
+         getFlickrLinkToImage(randomNum);//подключен flickr
+    }
 
-    getLinkToImage();//подключен unsplash
-    getFlickrLinkToImage(randomNum);//подключен flickr
-    // setBg(randomNum);
 };
 function getSlidePrev() {
-    console.log('prev');
+    // console.log('prev');
     randomNum--;
+    if (lang=="En") {
+        if (randomNum<1) {randomNum = 20};
 
-    if (randomNum<1) {randomNum = 20};
+        // getLinkToImage();//подключен unsplash
+        // getFlickrLinkToImage(randomNum);//подключен flickr
+        setBg(randomNum);
+    } else if (lang=="Ru") {
+        getLinkToImage();//подключен unsplash
+    } else {
+         getFlickrLinkToImage(randomNum);//подключен flickr
+    }
 
-    getLinkToImage();//подключен unsplash
-    getFlickrLinkToImage(randomNum);//подключен flickr
+    // if (randomNum<1) {randomNum = 20};
+
+    // getLinkToImage();//подключен unsplash
+    // getFlickrLinkToImage(randomNum);//подключен flickr
 
     // setBg(randomNum);
 };
@@ -274,6 +291,8 @@ window.addEventListener('load', getLocalStorage);
 const weatherIcon = document.querySelector('.weather-icon');
 const temperature = document.querySelector('.temperature');
 const weatherDescription = document.querySelector('.weather-description');
+const humidity = document.querySelector('.humidity');
+const windSpeed = document.querySelector('.wind-speed');
 const city = document.querySelector('.city');
 if (!city.value) {city.value = 'Минск'}
 
@@ -284,8 +303,10 @@ async function getWeather() {
 
   weatherIcon.className = 'weather-icon owf';
   weatherIcon.classList.add(`owf-${data.weather[0].id}`);
-  temperature.textContent = `${data.main.temp}°C`;
+  temperature.textContent = `${Math.round(data.main.temp)}°C`;
   weatherDescription.textContent = data.weather[0].description;
+  humidity.textContent = `${Math.round(data.main.humidity)}%`;
+  windSpeed.textContent = `${Math.round(data.wind.speed)} m/s`;
 
 //   console.log(data.weather[0].id, data.weather[0].description, data.main.temp);
 };
@@ -319,6 +340,7 @@ async function getQuotes() {
 //     console.log(x);
 //     console.log(data[x].text);
 };
+getQuotes();
 changeQuote.addEventListener('click',getQuotes);
 // getQuotes();
 
