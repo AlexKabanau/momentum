@@ -239,6 +239,9 @@ body {
 .active {
   opacity: 1;
 }
+[data-tooltip]::after {
+  content: attr(data-tooltip); /* Выводим текст */
+}
 .weather {
   display: flex;
   flex-direction: column;
